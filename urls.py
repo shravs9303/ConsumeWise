@@ -1,10 +1,14 @@
-from django.urls import path
-from . import views  # Make sure this line is present
-from .views import ImageUploadView  # Ensure this import is present
+from django.contrib import admin
+from django.urls import path, include
+from core.views import upload_image
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('query/', views.query_view, name='query'),
-    path('upload_image/', views.upload_image, name='upload_image'),  # Ensure this line is correct
-    path('upload-image/', ImageUploadView.as_view(), name='upload_image'),
+    path('admin/', admin.site.urls),
+    path('', include('core.urls')),  # This should correctly include core's URL patterns
+    path('upload_image/', upload_image, name='upload_image'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
